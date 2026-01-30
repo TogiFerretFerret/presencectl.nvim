@@ -67,7 +67,20 @@ local file_explorers = require("presence.file_explorers")
 local default_file_assets = require("presence.file_assets")
 local plugin_managers = require("presence.plugin_managers")
 local Discord = require("presence.discord")
-
+local function get_music_status()
+    local status = vim.trim(vim.fn.system("playerctl status 2>/dev/null"))
+    if status == "Playing" then
+        local title = vim.trim(vim.fn.system("playerctl metadata title"))
+        local artist = vim.trim(vim.fn.system("playerctl metadata artist"))
+        
+        if artist and #artist > 0 then
+            return string.format(" | Listening to: %s - %s", title, artist)
+        elseif title and #title > 0 then
+            return string.format(" | Listening to: %s", title)
+        end
+    end
+    return ""
+end
 function Presence:setup(...)
     -- Support setup invocation via both dot and colon syntax.
     -- To maintain backwards compatibility, colon syntax will still
@@ -467,11 +480,22 @@ end
 function Presence:format_status_text(status_type, ...)
     local option_name = string.format("%s_text", status_type)
     local text_option = self.options[option_name]
+    local text
+
+    -- Generate the base text (e.g., "Editing main.lua")
     if type(text_option) == "function" then
-        return text_option(...)
+        text = text_option(...)
     else
-        return string.format(text_option, ...)
+        text = string.format(text_option, ...)
     end
+
+    -- Append music ONLY to the activity lines (Editing, Browsing, etc.)
+    -- We skip 'workspace' (Project Name) and 'line_number'
+    if status_type ~= "workspace" and status_type ~= "line_number" then
+        return text .. get_music_status()
+    end
+
+    return text
 end
 
 -- Get the status text for the current buffer
