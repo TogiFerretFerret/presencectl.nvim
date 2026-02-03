@@ -8,7 +8,7 @@
 
 ## Features
 * Light and unobtrusive
-* No Python/Node providers (or CoC) required
+* No Python/Node providers (or CoC [hehe cock]) required
 * Cross-platform support: macOS, nixOS, Linux[\*](#notes), Windows[\*](https://github.com/andweeb/presence.nvim/projects/1#card-60537963), WSL[\*](https://github.com/andweeb/presence.nvim/wiki/Rich-Presence-in-WSL)
 * Startup time is fast(er than other Rich Presence plugins, by [kind of a lot](https://github.com/andweeb/presence.nvim/wiki/Plugin-Comparisons))
 * Written in Lua and [highly configurable](#configuration) in Lua (but also configurable in VimL if you want)
