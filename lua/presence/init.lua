@@ -978,7 +978,6 @@ function Presence:update_for_buffer(buffer, should_debounce)
     self:sync_self_activity()
 
     self.log:debug("Setting Discord activity...")
-	vim.notify(tableToString(activity))
     self.discord:set_activity(activity, function(err)
         if err then
             self.log:error(string.format("Failed to set activity in Discord: %s", err))

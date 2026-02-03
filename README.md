@@ -13,7 +13,7 @@
 * Startup time is fast(er than other Rich Presence plugins, by [kind of a lot](https://github.com/andweeb/presence.nvim/wiki/Plugin-Comparisons))
 * Written in Lua and [highly configurable](#configuration) in Lua (but also configurable in VimL if you want)
 * Manages Rich Presence across multiple Neovim instances in various environments (tmux panes/windows, ssh sessions, terminal tabs/windows, etc.)
-
+# this softmod no longer has playerctl because it looked stupid as fuck
 ## Installation
 Use your favorite plugin manager
 * [vim-plug](https://github.com/junegunn/vim-plug): `Plug 'andweeb/presence.nvim'`
