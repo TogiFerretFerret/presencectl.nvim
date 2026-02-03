@@ -49,6 +49,37 @@
 --     ... other methods and member variables
 -- }
 --
+function tableToString(tbl, indent)
+    indent = indent or 0
+    local result = string.rep(" ", indent) .. "{\n"
+    indent = indent + 2
+
+    for key, value in pairs(tbl) do
+        result = result .. string.rep(" ", indent)
+
+        if type(key) == "number" then
+            result = result .. "[" .. key .. "] = "
+        else
+            result = result .. "['" .. key .. "'] = "
+        end
+
+        if type(value) == "table" then
+            result = result .. tableToString(value, indent) .. ",\n"
+        elseif type(value) == "string" then
+            result = result .. "'" .. value .. "',\n"
+        else
+            result = result .. tostring(value) .. ",\n"
+        end
+    end
+
+    indent = indent - 2
+    result = result .. string.rep(" ", indent) .. "}"
+    
+    -- Remove the trailing comma from the last entry before the closing brace
+    result = string.gsub(result, ",%s*\n%s*}", "\n" .. string.rep(" ", indent) .. "}")
+
+    return result
+end
 local Presence = {}
 Presence.is_authorized = false
 Presence.is_authorizing = false
@@ -947,8 +978,7 @@ function Presence:update_for_buffer(buffer, should_debounce)
     self:sync_self_activity()
 
     self.log:debug("Setting Discord activity...")
-	vim.notify("Updating Discord presence...", vim.log.levels.DEBUG)
-	vim.notify(activity)
+	vim.notify(tableToString(activity))
     self.discord:set_activity(activity, function(err)
         if err then
             self.log:error(string.format("Failed to set activity in Discord: %s", err))
